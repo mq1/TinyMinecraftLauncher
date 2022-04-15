@@ -4,7 +4,7 @@
 use anyhow::Result;
 use druid::{
     im::Vector,
-    widget::{Label, List, Scroll, Tabs},
+    widget::{CrossAxisAlignment, Flex, Label, List, Scroll, Tabs},
     AppLauncher, Data, Lens, Widget, WidgetExt, WindowDesc,
 };
 
@@ -40,7 +40,13 @@ fn build_root_widget() -> impl Widget<AppState> {
     }))
     .lens(AppState::news);
 
-    let about_tab = Label::new("GPLv3 Licensed | © 2022 Manuel Quarneti");
+    let about_tab = Flex::column()
+        .cross_axis_alignment(CrossAxisAlignment::Start)
+        .with_child(Label::new(format!(
+            "TinyMinecraftLauncher version {}",
+            env!("CARGO_PKG_VERSION")
+        )))
+        .with_child(Label::new("GPLv3 Licensed | © 2022 Manuel Quarneti"));
 
     Tabs::new()
         .with_tab("News", news_tab)

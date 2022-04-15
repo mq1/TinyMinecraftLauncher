@@ -1,8 +1,16 @@
-import { TabWidget } from "std-widgets.slint";
+import { TabWidget, ListView } from "std-widgets.slint";
+
 AppWindow := Window {
+    property <[string]> news;
+
     TabWidget {
         Tab {
             title: "News";
+            ListView {
+                for article in news : Text {
+                    text: article;
+                }
+            }
         }
         Tab {
             title: "Settings";

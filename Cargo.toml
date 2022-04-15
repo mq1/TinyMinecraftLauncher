@@ -17,3 +17,10 @@ rev = "aadb57377ff7e33c49ad8d2bc8ad1b622af104d8"
 
 [build-dependencies]
 slint-build = "0.2"
+
+[profile.release]
+opt-level = "z"     # Optimize for size.
+lto = true          # Enable Link Time Optimization
+codegen-units = 1   # Reduce number of codegen units to increase optimizations.
+panic = "abort"     # Abort on panic
+strip = true        # Strip symbols from binary*

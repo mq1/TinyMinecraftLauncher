@@ -7,7 +7,6 @@ repository = "https://github.com/mq1/TinyMinecraftLauncher"
 license = "GPL-3.0-or-later"
 
 [dependencies]
-slint = "0.2"
 anyhow = "1"
 
 [dependencies.mc]
@@ -15,8 +14,10 @@ package = "minecraft-launcher-lib"
 git = "https://github.com/mq1/minecraft-launcher-lib-rs.git"
 rev = "aadb57377ff7e33c49ad8d2bc8ad1b622af104d8"
 
-[build-dependencies]
-slint-build = "0.2"
+[dependencies.druid]
+git = "https://github.com/linebender/druid.git"
+rev = "aa4b36658be4164f2a30ffebeef434638dbfc4f8"
+features = ["im"]
 
 [profile.release]
 opt-level = "z"     # Optimize for size.

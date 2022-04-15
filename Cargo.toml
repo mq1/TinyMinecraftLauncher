@@ -1,0 +1,13 @@
+[package]
+name = "tiny_minecraft_launcher"
+version = "0.0.1"
+edition = "2021"
+authors = ["Manuel Quarneti <manuelquarneti@gmail.com>"]
+repository = "https://github.com/mq1/TinyMinecraftLauncher"
+license = "GPL-3.0-or-later"
+
+[dependencies]
+slint = "0.2"
+
+[build-dependencies]
+slint-build = "0.2"

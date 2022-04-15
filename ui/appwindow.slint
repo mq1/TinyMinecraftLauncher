@@ -1,0 +1,17 @@
+import { TabWidget } from "std-widgets.slint";
+AppWindow := Window {
+    TabWidget {
+        Tab {
+            title: "News";
+        }
+        Tab {
+            title: "Settings";
+        }
+        Tab {
+            title: "About";
+            Text {
+                text: "GPLv3 Licensed | © 2022 Manuel Quarneti";
+            }
+        }
+    }
+}

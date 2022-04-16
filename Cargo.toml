@@ -8,6 +8,7 @@ license = "GPL-3.0-or-later"
 
 [dependencies]
 anyhow = "1"
+open = "2"
 
 [dependencies.mc]
 package = "minecraft-launcher-lib"

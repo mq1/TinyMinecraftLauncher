@@ -4,7 +4,7 @@
 use anyhow::Result;
 use druid::{
     im::Vector,
-    widget::{CrossAxisAlignment, Flex, Label, List, Scroll, Tabs},
+    widget::{Button, CrossAxisAlignment, Flex, Label, List, Scroll, Tabs},
     AppLauncher, Data, Lens, Widget, WidgetExt, WindowDesc,
 };
 
@@ -13,7 +13,7 @@ extern crate anyhow;
 
 #[derive(Data, Clone, Lens)]
 struct AppState {
-    news: Vector<String>,
+    news: Vector<(String, String)>,
 }
 
 fn main() -> Result<()> {
@@ -22,10 +22,10 @@ fn main() -> Result<()> {
     let news = mc::news::get_minecraft_news(None)?
         .article_grid
         .into_iter()
-        .map(|article| article.default_tile.title)
-        .collect::<Vec<String>>();
+        .map(|article| (article.default_tile.title, article.article_url.to_string()))
+        .collect::<Vec<(String, String)>>();
 
-    let news: Vector<String> = Vector::from(news);
+    let news: Vector<(String, String)> = Vector::from(news);
     let initial_state = AppState { news };
 
     AppLauncher::with_window(main_window)
@@ -36,7 +36,13 @@ fn main() -> Result<()> {
 
 fn build_root_widget() -> impl Widget<AppState> {
     let news_tab = Scroll::new(List::new(|| {
-        Label::new(|item: &String, _env: &_| format!("{item}"))
+        Flex::row()
+            .with_child(Label::new(|item: &(String, String), _env: &_| {
+                format!("{}", item.0)
+            }))
+            .with_child(
+                Button::new("Read").on_click(|_ctx, (_title, url), _env| open::that(url).unwrap()),
+            )
     }))
     .lens(AppState::news);
 

@@ -37,8 +37,8 @@ fn main() -> Result<()> {
 fn build_root_widget() -> impl Widget<AppState> {
     let news_tab = Scroll::new(List::new(|| {
         Flex::row()
-            .with_child(Label::new(|item: &(String, String), _env: &_| {
-                format!("{}", item.0)
+            .with_child(Label::new(|(title, _url): &(String, String), _env: &_| {
+                title.to_owned()
             }))
             .with_child(
                 Button::new("Read").on_click(|_ctx, (_title, url), _env| open::that(url).unwrap()),

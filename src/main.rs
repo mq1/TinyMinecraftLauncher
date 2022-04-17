@@ -1,18 +1,20 @@
 // On Windows platform, don't show a console when opening the app.
 #![windows_subsystem = "windows"]
 
+pub mod ui;
+
 use anyhow::Result;
-use druid::{
-    im::Vector,
-    widget::{Button, CrossAxisAlignment, Flex, Label, List, Scroll, Tabs},
-    AppLauncher, Data, Lens, Widget, WidgetExt, WindowDesc,
+use druid::{im::Vector, widget::Tabs, AppLauncher, Data, Lens, Widget, WindowDesc};
+use ui::{
+    about::build_about_widget, accounts::build_accounts_widget, instances::build_instances_widget,
+    news::build_news_widget, settings::build_settings_widget,
 };
 
 #[macro_use]
 extern crate anyhow;
 
 #[derive(Data, Clone, Lens)]
-struct AppState {
+pub struct AppState {
     news: Vector<(String, String)>,
 }
 
@@ -35,26 +37,10 @@ fn main() -> Result<()> {
 }
 
 fn build_root_widget() -> impl Widget<AppState> {
-    let news_tab = Scroll::new(List::new(|| {
-        Flex::row()
-            .with_child(Label::new(|(title, _url): &(String, String), _env: &_| {
-                title.to_owned()
-            }))
-            .with_child(
-                Button::new("Read").on_click(|_ctx, (_title, url), _env| open::that(url).unwrap()),
-            )
-    }))
-    .lens(AppState::news);
-
-    let about_tab = Flex::column()
-        .cross_axis_alignment(CrossAxisAlignment::Start)
-        .with_child(Label::new(format!(
-            "TinyMinecraftLauncher version {}",
-            env!("CARGO_PKG_VERSION")
-        )))
-        .with_child(Label::new("GPLv3 Licensed | © 2022 Manuel Quarneti"));
-
     Tabs::new()
-        .with_tab("News", news_tab)
-        .with_tab("About", about_tab)
+        .with_tab("Instances", build_instances_widget())
+        .with_tab("Accounts", build_accounts_widget())
+        .with_tab("News", build_news_widget())
+        .with_tab("Settings", build_settings_widget())
+        .with_tab("About", build_about_widget())
 }

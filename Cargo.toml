@@ -13,7 +13,7 @@ open = "2"
 [dependencies.mc]
 package = "minecraft-launcher-lib"
 git = "https://github.com/mq1/minecraft-launcher-lib-rs.git"
-rev = "aadb57377ff7e33c49ad8d2bc8ad1b622af104d8"
+rev = "7a442f77e55a4e7a1485301d5f469570cbca3971"
 
 [dependencies.druid]
 git = "https://github.com/linebender/druid.git"
@@ -21,8 +21,8 @@ rev = "aa4b36658be4164f2a30ffebeef434638dbfc4f8"
 features = ["im"]
 
 [profile.release]
-opt-level = "z"     # Optimize for size.
-lto = true          # Enable Link Time Optimization
-codegen-units = 1   # Reduce number of codegen units to increase optimizations.
-panic = "abort"     # Abort on panic
-strip = true        # Strip symbols from binary*
+opt-level = "z"
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true

@@ -1,46 +1,58 @@
-// On Windows platform, don't show a console when opening the app.
-#![windows_subsystem = "windows"]
+use iced::pure::{button, column, container, row, text, Element, Sandbox};
+use iced::{Length, Settings};
 
-pub mod ui;
-
-use anyhow::Result;
-use druid::{im::Vector, widget::Tabs, AppLauncher, Data, Lens, Widget, WindowDesc};
-use ui::{
-    about::build_about_widget, accounts::build_accounts_widget, instances::build_instances_widget,
-    news::build_news_widget, settings::build_settings_widget,
-};
-
-#[macro_use]
-extern crate anyhow;
-
-#[derive(Data, Clone, Lens)]
-pub struct AppState {
-    news: Vector<(String, String)>,
+pub fn main() -> iced::Result {
+    App::run(Settings::default())
 }
 
-fn main() -> Result<()> {
-    let main_window = WindowDesc::new(build_root_widget()).title("TinyMinecraftLauncher");
-
-    let news = mc::news::get_minecraft_news(None)?
-        .article_grid
-        .into_iter()
-        .map(|article| (article.default_tile.title, article.article_url.to_string()))
-        .collect::<Vec<(String, String)>>();
-
-    let news: Vector<(String, String)> = Vector::from(news);
-    let initial_state = AppState { news };
-
-    AppLauncher::with_window(main_window)
-        .log_to_console()
-        .launch(initial_state)
-        .map_err(|e| anyhow!(e))
+enum App {
+    News,
+    About,
 }
 
-fn build_root_widget() -> impl Widget<AppState> {
-    Tabs::new()
-        .with_tab("Instances", build_instances_widget())
-        .with_tab("Accounts", build_accounts_widget())
-        .with_tab("News", build_news_widget())
-        .with_tab("Settings", build_settings_widget())
-        .with_tab("About", build_about_widget())
+#[derive(Debug, Clone, Copy)]
+enum Message {
+    GoToNews,
+    GoToAbout,
+}
+
+impl Sandbox for App {
+    type Message = Message;
+
+    fn new() -> Self {
+        Self::News
+    }
+
+    fn title(&self) -> String {
+        String::from("TinyMinecraftLauncher")
+    }
+
+    fn update(&mut self, message: Message) {
+        match message {
+            Message::GoToNews => *self = App::News,
+            Message::GoToAbout => *self = App::About,
+        }
+    }
+
+    fn view(&self) -> Element<Message> {
+        let content = match self {
+            App::News => text("News"),
+            App::About => {
+                text("TinyMinecraftLauncher - GPLv3 Licensed - Copyright (c) 2022 Manuel Quarneti")
+            }
+        };
+
+        let nav = column()
+            .padding(20)
+            .push(button("News").on_press(Message::GoToNews))
+            .push(button("About").on_press(Message::GoToAbout));
+
+        let main = container(content)
+            .width(Length::Fill)
+            .height(Length::Fill)
+            .center_x()
+            .center_y();
+
+        row().padding(20).push(nav).push(main).into()
+    }
 }

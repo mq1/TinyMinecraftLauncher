@@ -7,18 +7,14 @@ repository = "https://github.com/mq1/TinyMinecraftLauncher"
 license = "GPL-3.0-or-later"
 
 [dependencies]
+druid = { git = "https://github.com/linebender/druid.git", features = ["im"] }
 anyhow = "1"
 open = "2"
 
 [dependencies.mc]
 package = "minecraft-launcher-lib"
 git = "https://github.com/mq1/minecraft-launcher-lib-rs.git"
-rev = "7a442f77e55a4e7a1485301d5f469570cbca3971"
-
-[dependencies.druid]
-git = "https://github.com/linebender/druid.git"
-rev = "aa4b36658be4164f2a30ffebeef434638dbfc4f8"
-features = ["im"]
+rev = "d6541d9fa951c6a5a7bc541c11432696d86a4843"
 
 [profile.release]
 opt-level = "z"

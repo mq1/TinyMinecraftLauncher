@@ -14,8 +14,15 @@ use ui::{
 extern crate anyhow;
 
 #[derive(Data, Clone, Lens)]
+pub struct Article {
+    image_url: String,
+    title: String,
+    url: String
+}
+
+#[derive(Data, Clone, Lens)]
 pub struct AppState {
-    news: Vector<(String, String)>,
+    news: Vector<Article>,
 }
 
 fn main() -> Result<()> {
@@ -24,10 +31,10 @@ fn main() -> Result<()> {
     let news = mc::news::get_minecraft_news(None)?
         .article_grid
         .into_iter()
-        .map(|article| (article.default_tile.title, article.article_url.to_string()))
-        .collect::<Vec<(String, String)>>();
+        .map(|article| Article { image_url: article.default_tile.image.image_url.to_string(), title: article.default_tile.title, url: article.article_url.to_string() })
+        .collect::<Vec<Article>>();
 
-    let news: Vector<(String, String)> = Vector::from(news);
+    let news: Vector<Article> = Vector::from(news);
     let initial_state = AppState { news };
 
     AppLauncher::with_window(main_window)

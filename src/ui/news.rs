@@ -6,13 +6,12 @@ use druid::{
 use crate::{AppState, Article};
 
 fn build_item() -> impl Widget<Article> {
-    Flex::row()
-        .with_child(Label::new(|data: &Article, _: &Env| data.title.to_owned()))
-        .with_child(
-            Button::new("Read").on_click(|_ctx, article: &mut Article, _env| {
-                open::that(article.url.to_owned()).unwrap()
-            }),
-        )
+    let label = Label::new(|data: &Article, _: &Env| data.title.to_owned());
+
+    let read_button = Button::new("Read")
+        .on_click(|_ctx, article: &mut Article, _env| open::that(article.url.to_owned()).unwrap());
+
+    Flex::row().with_child(label).with_child(read_button)
 }
 
 pub fn build_news_widget() -> impl Widget<AppState> {

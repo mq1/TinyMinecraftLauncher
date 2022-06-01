@@ -14,6 +14,6 @@ fn build_item() -> impl Widget<Article> {
     Flex::row().with_child(label).with_child(read_button)
 }
 
-pub fn build_news_widget() -> impl Widget<AppState> {
+pub fn build_widget() -> impl Widget<AppState> {
     Scroll::new(List::new(build_item).lens(AppState::news))
 }

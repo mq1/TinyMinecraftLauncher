@@ -8,6 +8,7 @@ license = "GPL-3.0-or-later"
 
 [dependencies]
 druid = { git = "https://github.com/linebender/druid.git", features = ["im"] }
+const_format = "0.2"
 anyhow = "1"
 open = "2"
 

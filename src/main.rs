@@ -17,7 +17,9 @@ extern crate anyhow;
 pub struct AppState {}
 
 fn main() -> Result<()> {
-    let main_window = WindowDesc::new(build_root_widget()).title("TinyMinecraftLauncher");
+    let main_window = WindowDesc::new(build_root_widget())
+        .title("TinyMinecraftLauncher")
+        .window_size((525., 400.));
 
     let initial_state = AppState {};
 

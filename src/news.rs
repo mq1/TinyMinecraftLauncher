@@ -1,6 +1,6 @@
 use druid::{
     widget::{Button, Flex, Label, Scroll},
-    Widget,
+    Widget, WidgetExt,
 };
 
 use crate::AppState;
@@ -13,8 +13,9 @@ fn build_item(article: mc::news::Article) -> impl Widget<AppState> {
 
     Flex::row()
         .with_child(label)
-        .with_default_spacer()
+        .with_flex_spacer(1.)
         .with_child(read_button)
+        .fix_width(500.)
 }
 
 pub fn build_widget() -> impl Widget<AppState> {
@@ -29,5 +30,5 @@ pub fn build_widget() -> impl Widget<AppState> {
         col.add_child(build_item(article));
     }
 
-    Scroll::new(col)
+    Scroll::new(col).expand()
 }

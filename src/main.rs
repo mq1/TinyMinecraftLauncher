@@ -1,40 +1,77 @@
-// On Windows platform, don't show a console when opening the app.
-#![windows_subsystem = "windows"]
-
 mod about;
-mod accounts;
-mod instances;
 mod news;
-mod settings;
 
-use anyhow::Result;
-use druid::{widget::{Tabs, Axis}, AppLauncher, Data, Lens, Widget, WindowDesc};
+use iced::{button, Button, Column, Container, Element, Length, Row, Sandbox, Settings, Text};
 
-#[macro_use]
-extern crate anyhow;
-
-#[derive(Data, Clone, Lens)]
-pub struct AppState {}
-
-fn main() -> Result<()> {
-    let main_window = WindowDesc::new(build_root_widget())
-        .title("TinyMinecraftLauncher")
-        .window_size((525., 400.));
-
-    let initial_state = AppState {};
-
-    AppLauncher::with_window(main_window)
-        .log_to_console()
-        .launch(initial_state)
-        .map_err(|e| anyhow!(e))
+pub fn main() -> iced::Result {
+    App::run(Settings::default())
 }
 
-fn build_root_widget() -> impl Widget<AppState> {
-    Tabs::new()
-        .with_axis(Axis::Vertical)
-        .with_tab("Instances", instances::build_widget())
-        .with_tab("Accounts", accounts::build_widget())
-        .with_tab("News", news::build_widget())
-        .with_tab("Settings", settings::build_widget())
-        .with_tab("About", about::build_widget())
+enum Router {
+    News,
+    About,
+}
+
+struct App {
+    router: Router,
+
+    news_button: button::State,
+    about_button: button::State,
+
+    news: news::News,
+    about: about::About,
+}
+
+#[derive(Debug, Clone, Copy)]
+enum Message {
+    GoToNews,
+    GoToAbout,
+}
+
+impl Sandbox for App {
+    type Message = Message;
+
+    fn new() -> Self {
+        Self {
+            router: Router::News,
+            news_button: button::State::new(),
+            about_button: button::State::new(),
+            news: news::News::new(),
+            about: about::About::new(),
+        }
+    }
+
+    fn title(&self) -> String {
+        String::from("TinyMinecraftLauncher")
+    }
+
+    fn update(&mut self, message: Message) {
+        match message {
+            Message::GoToNews => (*self).router = Router::News,
+            Message::GoToAbout => (*self).router = Router::About,
+        }
+    }
+
+    fn view(&mut self) -> Element<Message> {
+        let content: Element<Message> = match self.router {
+            Router::News => self.news.view(),
+            Router::About => self.about.view(),
+        };
+
+        let nav = Column::new()
+            .padding(20)
+            .push(Button::new(&mut self.news_button, Text::new("News")).on_press(Message::GoToNews))
+            .push(
+                Button::new(&mut self.about_button, Text::new("About"))
+                    .on_press(Message::GoToAbout),
+            );
+
+        let main = Container::new(content)
+            .width(Length::Fill)
+            .height(Length::Fill)
+            .center_x()
+            .center_y();
+
+        Row::new().padding(20).push(nav).push(main).into()
+    }
 }

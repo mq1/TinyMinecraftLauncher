@@ -8,7 +8,7 @@ mod news;
 mod settings;
 
 use anyhow::Result;
-use druid::{widget::Tabs, AppLauncher, Data, Lens, Widget, WindowDesc};
+use druid::{widget::{Tabs, Axis}, AppLauncher, Data, Lens, Widget, WindowDesc};
 
 #[macro_use]
 extern crate anyhow;
@@ -31,6 +31,7 @@ fn main() -> Result<()> {
 
 fn build_root_widget() -> impl Widget<AppState> {
     Tabs::new()
+        .with_axis(Axis::Vertical)
         .with_tab("Instances", instances::build_widget())
         .with_tab("Accounts", accounts::build_widget())
         .with_tab("News", news::build_widget())
